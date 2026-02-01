@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# pwa
+public/sw.js
+public/workbox-*.js
+public/worker-*.js
+public/fallback-*.js
+public/precache-*.js
+
+# agent protocol
+Agent.md
+agent-protocol/
