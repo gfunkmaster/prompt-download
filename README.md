@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧠 PromptScanner
 
-## Getting Started
+**The ultimate tool for AI Prompt Hoarders.**  
+Extract, Organize, and Reuse AI prompts from screenshots, photos, and social media feeds.
 
-First, run the development server:
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Status](https://img.shields.io/badge/status-Production_Ready-green.svg)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 What is this?
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**PromptScanner** is a Progressive Web App (PWA) designed to solve a modern problem: finding a great AI prompt (on X/Twitter, YouTube, or Reddit), taking a screenshot, and then... forgetting it exists.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Instead of a cluttered camera roll, PromptScanner turns those screenshots into a searchable, tagged library of text prompts ready for Midjourney, ChatGPT, or Claude.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### ✨ Key Features
 
-## Learn More
+* **📸 Instant OCR**: Reads text from images instantly using `Tesseract.js` (running locally in your browser for privacy).
+* **🧹 Magic Polish**: Automatically removes timestamps, "Show more" buttons, and social media clutter to leave just the clean prompt.
+* **🏷️ Smart Tags**: Auto-detects and tags prompts like `#Midjourney`, `#ChatGPT`, `#Code`, or `#Recipe`.
+* **📱 Installable PWA**: Add to your mobile Home Screen and use it like a native app.
+* **📄 Pro Exports**: Export your scanned library as a professional PDF.
+* **🔒 100% Private**: All data is stored in your browser's `Local Storage`. No images are uploaded to any server.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Built with the **Architect-Maxima** protocol.
 
-## Deploy on Vercel
+* **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+* **Language**: TypeScript
+* **Styling**: Vanilla CSS Variables (Glassmorphism Design System)
+* **OCR Engine**: [Tesseract.js](https://tesseract.projectnaptha.com/)
+* **PDF Generation**: `jspdf`
+* **PWA**: `next-pwa`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🏁 Getting Started
+
+### Prerequisites
+
+* Node.js 18+
+* npm
+
+### Installation
+
+1. Clone the repo:
+
+    ```bash
+    git clone https://github.com/gfunkmaster/prompt-download.git
+    cd prompt-download
+    ```
+
+2. Install dependencies:
+
+    ```bash
+    npm install
+    ```
+
+3. Run the development server:
+
+    ```bash
+    npm run dev
+    ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 📱 How to Install (Mobile)
+
+Since this is a PWA, you can install it on iOS/Android:
+
+1. Navigate to the deployed URL (or valid https localhost).
+2. Tap **Share** (iOS) or **Menu** (Android).
+3. Select **"Add to Home Screen"**.
+4. Launch it from your icon for a full-screen native experience.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
