@@ -33,33 +33,66 @@ export default function Scanner() {
     const handleMagicPolish = () => {
         if (!resultText) return;
 
-        let cleaned = resultText;
+        let lines = resultText.split('\n');
 
-        // 1. Extraction from "Prompt:" if present
+        // 1. Filter out common UI noise and status indicators
+        const uiNoise = [
+            /^\d{1,2}:\d{2}/i, // Clocks
+            /^\d{1,3}%/i,      // Battery
+            /X\.com|Twitter|Post/gi,
+            /Visa fler|Show more|Translate|View/gi,
+            /Reply|Repost|Retweet|Like|Bookmark|Share/gi,
+            /Following|Followers|Joined/gi,
+            /Signal|LTE|5G|4G|WiFi|Bluetooth|Battery/gi,
+            /@\w+/g,           // Usernames
+            /^\s*\d+\s*$/      // Lone numbers (likes/views)
+        ];
+
+        // 2. Prompt-specific positive triggers
+        const promptTriggers = [
+            /--v/i, /--ar/i, /--stylize/i, /--chaos/i, /--weird/i, /--tile/i,
+            /photoreal/i, /hyperdetailed/i, /8k/i, /unreal engine/i, /lighting/i,
+            /cinematic/i, /bokeh/i, /masterpiece/i, /high quality/i, /render/i,
+            /aspect ratio/i, /negative prompt/i, /styles/i, /weighted/i
+        ];
+
+        // 3. Heuristic: Keep lines if they contain a trigger OR are "wordy" enough
+        let cleanedLines = lines.filter(line => {
+            const trimmed = line.trim();
+            if (!trimmed) return false;
+
+            // Is it noise?
+            const isNoise = uiNoise.some(pattern => pattern.test(trimmed));
+
+            // Does it look like a prompt?
+            const isPromptLikely = promptTriggers.some(pattern => pattern.test(trimmed));
+
+            // Keep if it's long and not noise, or specifically looks like a prompt
+            if (isPromptLikely) return true;
+            if (isNoise) return false;
+
+            // Word density check: Prompts are usually sentences.
+            // Small fragments (< 3 words) without prompt keywords are likely noise.
+            const wordCount = trimmed.split(/\s+/).length;
+            return wordCount >= 3;
+        });
+
+        let cleaned = cleanedLines.join('\n');
+
+        // 4. Special case: Extraction from "Prompt:" if present
         const promptRegex = /Prompt:\s*"?(.*?)(?=(?:Prompt:|Visa fler|Show more|$))/gis;
         const matches = [...resultText.matchAll(promptRegex)];
-
         if (matches.length > 0) {
-            // Keep the "Prompt:" label so future scans recognize it!
             cleaned = matches.map(m => "Prompt: " + m[1].trim()).join('\n\n');
-        } else {
-            // Fallback: Remove noise
-            const noisePatterns = [
-                /^\d{1,2}:\d{2}.*$/gm, /^\d{1,3}%$/gm, /X\.com|Twitter|Post/gi, /Visa fler|Show more/gi,
-                /@\w+/g, /^\s*[\$\€\£]\d+.*$/gm, /^[^\w\s]*[\|\|\—\-\_]{2,}.*$/gm, /^\s*\d+\s+[a-z]{0,2}\s*[\$\%]/gim
-            ];
-            noisePatterns.forEach(p => cleaned = cleaned.replace(p, ''));
         }
 
-        // 2. Formatting
+        // 5. Formatting & Cleanup
+        cleaned = cleaned.replace(/‘|’/g, "'").replace(/“|”/g, '"');
         cleaned = cleaned.replace(/([a-z,])\n([a-z])/g, '$1 $2').replace(/[ ]+/g, ' ');
-        cleaned = cleaned.replace(/‘|’/g, "'").replace(/“|”/g, '"').replace(/Visa fler|Show more/gi, '');
-        cleaned = cleaned.replace(/(\s)(\d+[\.\)])/g, '\n$2');
         cleaned = cleaned.replace(/\n{3,}/g, '\n\n');
 
         setResultText(cleaned.trim());
-
-        showToast(matches.length > 0 ? `✨ Extracted ${matches.length} prompts!` : '✨ Text polished & cleaned!');
+        showToast(matches.length > 0 ? `✨ Found ${matches.length} explicit prompts!` : '✨ Deep extraction complete!');
     };
 
     // === 3. Smart Copy / Launch ===
