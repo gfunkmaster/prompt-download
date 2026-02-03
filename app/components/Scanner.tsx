@@ -25,6 +25,26 @@ export default function Scanner() {
 
     const shareCardRef = React.useRef<HTMLDivElement>(null);
 
+    // === 0. Handle Shared Content ===
+    React.useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const shared = params.get('share_text');
+
+        if (shared) {
+            setResultText(decodeURIComponent(shared));
+            setStatus('DONE');
+            // Clean URL without refresh
+            window.history.replaceState({}, '', '/');
+            showToast('Received shared content! 📨');
+        }
+
+        const error = params.get('share_error');
+        if (error) {
+            showToast('Could not process shared file (Text only supported currently).');
+            window.history.replaceState({}, '', '/');
+        }
+    }, []);
+
     const showToast = (msg: string) => {
         setToastMsg(msg);
     };
